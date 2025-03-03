@@ -1,7 +1,9 @@
 const Task=require('../models/Task');
 const User=require('../models/User');
 const OldTask=require('../models/OldTask');
-const {redisClient,getAsync,setAsync,delAsync}=require('../config/redis');
+const redisClient=require('../config/redis');
+const logger=require("../config/logger");
+
 exports.createTask=async(req)=>{
     const {title,dueDate,contributors}=req.body;
     if(!title||!dueDate){
@@ -20,7 +22,7 @@ exports.createTask=async(req)=>{
    }
     const task=new Task({title,dueDate,coordinator:coordinatorId,contributors});
     await task.save();
-    await delAsync('tasks');
+    await redisClient.del('tasks');
     return {message:'Task created successfully',task};
 }
 
@@ -54,7 +56,7 @@ exports.updateTask=async (req) => {
     }
     
     await task.save();
-    await delAsync('tasks');
+    await redisClient.del('tasks'); 
     return {message:'Task updated',task};
 }
 exports.addComment=async(req)=>{
@@ -77,7 +79,7 @@ exports.addComment=async(req)=>{
         mentions};
     task.comments.push(newComment);
     await task.save();
-    await delAsync(`task:${taskId}`);
+    await redisClient.del(`task:${taskId}`);
     return {message:'Comment added successfully',comment:newComment};
 };
 
@@ -104,12 +106,14 @@ exports.moveToOldTasks=async(req)=>{
    });
     await oldTask.save();
     await Task.findByIdAndDelete(task._id);
-    await redis.del('tasks');
+    await redisClient.del('tasks');
     return {message:'Task moved to old tasks'};
 }
 exports.getTasks=async(req)=>{
     const {state,coordinator,contributor,search,dueDateFrom,dueDateTo,lastId,limit=10}=req.query;
     let filter={};
+    logger.info("Fetching tasks", { state, search });
+
 
     if(state)filter.state=state;
     if(coordinator)filter.coordinator=coordinator;
@@ -123,9 +127,9 @@ exports.getTasks=async(req)=>{
 
     if(lastId)filter._id={$gt:lastId};
 
-    const cacheKey = `tasks:${JSON.stringify(filter)}`;
-    const cachedTasks = await redis.get(cacheKey);
-    if (cachedTasks) return JSON.parse(cachedTasks);
+    const cacheKey=`tasks:${JSON.stringify(filter)}`;
+    const cachedTasks=await redisClient.get(cacheKey);
+    if(cachedTasks)return JSON.parse(cachedTasks);
 
     const tasks=await Task.find(filter)
       .sort({_id:1})
@@ -133,6 +137,6 @@ exports.getTasks=async(req)=>{
       .select('title dueDate state coordinator contributors')
       .populate('coordinator','firstName lastName')
       .populate('contributors','firstName lastName');
-    await setAsync(cacheKey, 60, JSON.stringify(response));
+    await redisClient.set(cacheKey, JSON.stringify(tasks), { EX: 60 });
     return { tasks, lastId: tasks.length ? tasks[tasks.length - 1]._id : null };
 }

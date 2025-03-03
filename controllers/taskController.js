@@ -1,5 +1,5 @@
 const taskService=require('../services/taskService');
-
+const logger=require('../config/logger');
 
 exports.createTask=async(req,res) => {
     try {
@@ -19,6 +19,14 @@ exports.updateTask=async(req,res)=>{
         res.status(500).json({message:err.message});
    }
 }
+exports.addComment=async(req,res)=>{
+    try{
+        const result=await taskService.addComment(req);
+        res.status(201).json(result);
+   }catch(err){
+        res.status(500).json({message:err.message});
+   }
+}
 
 exports.moveToOldTasks=async(req,res)=>{
     try{
@@ -29,20 +37,13 @@ exports.moveToOldTasks=async(req,res)=>{
    }
 }
 
-exports.addComment=async(req,res)=>{
-    try{
-        const result=await taskService.addComment(req);
-        res.status(201).json(result);
-   }catch(err){
-        res.status(500).json({message:err.message});
-   }
-}
 
 exports.getTasks=async(req,res)=>{
     try{
-        const result=await taskService.getTasks(req);
-        res.status(200).json({result});
+          const result=await taskService.getTasks(req);
+          res.status(200).json({result});
    }catch(err){
-        res.status(500).json({message:err.message});
+          logger.error("Error fetching tasks", { error: error.message });
+          res.status(500).json({message:err.message});
    }
 }

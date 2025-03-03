@@ -1,8 +1,19 @@
-const redis=require('redis');
+const {createClient}=require('redis');
 
-const client=redis.createClient({
-  url:'redis://localhost:6379',
+const redisClient=createClient({
+    socket:{
+        host:'redis',
+        port:6379
+    }
 });
-client.on('error',(err)=>console.error('Redis Error:',err));
-client.connect().then(()=>console.log('Connected to Redis'));
-module.exports=client;
+
+redisClient.on('error',(err) => {
+    console.error('Redis error:', err);
+});
+
+(async()=>{
+    await redisClient.connect();
+    console.log('Connected to Redis');
+})();
+
+module.exports=redisClient;
