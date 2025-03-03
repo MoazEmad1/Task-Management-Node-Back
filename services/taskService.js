@@ -137,6 +137,6 @@ exports.getTasks=async(req)=>{
       .select('title dueDate state coordinator contributors')
       .populate('coordinator','firstName lastName')
       .populate('contributors','firstName lastName');
-    await redisClient.set(cacheKey, JSON.stringify(tasks), { EX: 60 });
-    return { tasks, lastId: tasks.length ? tasks[tasks.length - 1]._id : null };
+    await redisClient.set(cacheKey, JSON.stringify(tasks), { EX:60 });
+    return { tasks, lastId:tasks.length ? tasks[tasks.length - 1]._id :null };
 }

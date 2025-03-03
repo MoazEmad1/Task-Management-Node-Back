@@ -4,6 +4,7 @@ const logger=require('../config/logger');
 exports.createTask=async(req,res) => {
     try {
         const result=await taskService.createTask(req);
+        logger.info(`Task created: ${task._id}`,{task});
         res.status(201).json({result});
    }catch (err) {
         res.status(500).json({message:err.message});
@@ -43,7 +44,7 @@ exports.getTasks=async(req,res)=>{
           const result=await taskService.getTasks(req);
           res.status(200).json({result});
    }catch(err){
-          logger.error("Error fetching tasks", { error: error.message });
+          logger.error("Error fetching tasks", { error:error.message });
           res.status(500).json({message:err.message});
    }
 }

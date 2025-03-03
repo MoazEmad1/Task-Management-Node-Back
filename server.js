@@ -13,8 +13,8 @@ const cron=require('node-cron');
 const authRoutes=require('./routes/authRoutes');
 const taskRoutes=require('./routes/taskRoutes');
 const oldTaskRoutes=require('./routes/oldTaskRoutes')
-const moveOldTasks=require('./jobs/moveTasksJob');
-const logger = require("./config/logger");
+const {moveOldTasks}=require('./jobs/moveTasksJob');
+const logger=require("./config/logger");
 
 
 const app=express();
@@ -26,8 +26,8 @@ app.use(compression());
 app.use(cors());
 // app.use(pinoHttp({logger:pino({level:'info'})}));
 
-const PORT=process.env.PORT||5000;
-const MONGO_URI=process.env.MONGO_URI||'mongodb://mongo:27017/TaskManagement';
+const PORT=process.env.PORT||3000;
+const MONGO_URI=process.env.MONGO_URI||'mongodb://localhost:27017/TaskManagement';
 
 mongoose.connect(MONGO_URI)
 .then(()=>console.log('Connected to mongoDB'))
@@ -35,7 +35,7 @@ mongoose.connect(MONGO_URI)
 
 cron.schedule('* * * * *',()=>{
   console.log('Running scheduled task check...');
-  moveOldTasks.moveOldTasks();
+  moveOldTasks();
 });
 
 app.use((req,res,next)=>{
@@ -47,6 +47,8 @@ app.use((err,req,res,next) => {
   logger.error(`${err.message} - ${req.method} ${req.url}`);
   res.status(500).send("Something went wrong!");
 });
+logger.info("Testing app.log");
+
 
 
 app.use('/api/auth',authRoutes);

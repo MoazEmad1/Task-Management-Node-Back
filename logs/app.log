@@ -1,0 +1,10 @@
+{"level":"info","message":"Testing app.log - This should appear in app.log","timestamp":"2025-03-03T20:33:28.732Z"}
+{"level":"info","message":"Running scheduled task check...","timestamp":"2025-03-03T20:35:00.477Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T20:35:44.337Z"}
+{"level":"info","message":"Running scheduled task check...","timestamp":"2025-03-03T20:36:00.460Z"}
+{"level":"info","message":"Testing app.log - This should appear in app.log","timestamp":"2025-03-03T20:36:28.787Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T20:36:32.220Z"}
+{"level":"info","message":"GET /api/tasks?search=Test&limit=5 - ::1","timestamp":"2025-03-03T20:36:39.141Z"}
+{"level":"info","message":"Fetching tasks","search":"Test","timestamp":"2025-03-03T20:36:39.147Z"}
+{"level":"info","message":"GET /api/tasks?search=Test&limit=5 - ::1","timestamp":"2025-03-03T20:37:48.054Z"}
+{"level":"info","message":"Fetching tasks","search":"Test","timestamp":"2025-03-03T20:37:48.058Z"}

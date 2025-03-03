@@ -1,19 +1,17 @@
-const winston = require("winston");
-const { LogstashTransport } = require("winston-logstash-transport");
-
+const winston=require('winston');
+const logFormat=winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  );
 const logger = winston.createLogger({
+  level: 'info',
+  format: logFormat,
   transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json()
-      ),
-    }),
-    new LogstashTransport({
-      host:process.env.LOGSTASH_HOST||"logstash",
-      port:process.env.LOGSTASH_PORT||5044,
-    }),
+    new winston.transports.File({filename:'./logs/app.log'}),
+    new winston.transports.Console(),
   ],
 });
-
+if(process.env.NODE_ENV!=="production"){
+    logger.add(new winston.transports.Console({format:winston.format.simple()}));
+}
 module.exports=logger;

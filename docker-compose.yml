@@ -39,37 +39,52 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.5.1
-    container_name: elasticsearch
+    container_name: elasticsearch_container
     environment:
       - discovery.type=single-node
+      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false 
+
     ports:
       - "9200:9200"
     volumes:
-      - es_data:/usr/share/elasticsearch/data
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.5.1
-    container_name: logstash
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5044:5044"
-    volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - elastic_data:/usr/share/elasticsearch/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.5.1
-    container_name: kibana
+    container_name: kibana_container
     depends_on:
       - elasticsearch
     ports:
       - "5601:5601"
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.1
+    container_name: logstash_container
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.5.1
+    container_name: filebeat_container
+    user: root
+    depends_on:
+      - logstash
+    volumes:
+      - ./logs:/var/log/app
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+    command: ["filebeat", "-e", "-strict.perms=false"]
 
 volumes:
   redis_data:
     driver: local
   mongo_data:
     driver: local
-  es_data:
+  elastic_data:
     driver: local
