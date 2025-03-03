@@ -4,7 +4,8 @@ const taskController=require('../controllers/taskController');
 const verifyToken=require('../middleware/verifyToken');
 
 router.post('/create',verifyToken,taskController.createTask);
-router.post('/update',verifyToken,taskController.updateTask);
+router.put('/update',verifyToken,taskController.updateTask);
+router.post('/:taskId/addComment',verifyToken,taskController.addComment);
 router.post('/:taskId/moveToOldTasks',verifyToken,taskController.moveToOldTasks);
 router.get('/',verifyToken,taskController.getTasks);
 

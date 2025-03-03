@@ -1,5 +1,5 @@
-const Task=require("../models/Task");
-const OldTask=require("../models/OldTask");
+const Task=require('../models/Task');
+const OldTask=require('../models/OldTask');
 
 exports.moveOldTasks=async()=>{
     try{
@@ -12,7 +12,7 @@ exports.moveOldTasks=async()=>{
                 title:task.title,
                 dueDate:task.dueDate,
                 startDate:task.startDate,
-                state:"Done",
+                state:'Done',
                 coordinator:task.coordinator,
                 contributors:task.contributors,
                 attachments:task.attachments,

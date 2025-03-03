@@ -29,6 +29,15 @@ exports.moveToOldTasks=async(req,res)=>{
    }
 }
 
+exports.addComment=async(req,res)=>{
+    try{
+        const result=await taskService.addComment(req);
+        res.status(201).json(result);
+   }catch(err){
+        res.status(500).json({message:err.message});
+   }
+}
+
 exports.getTasks=async(req,res)=>{
     try{
         const result=await taskService.getTasks(req);

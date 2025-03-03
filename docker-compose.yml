@@ -1,0 +1,41 @@
+services:
+  app:
+    image: moazemad/task-manager:latest
+    container_name: task_manager_app
+    restart: always
+    depends_on:
+      - redis
+      - mongodb
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://mongodb:27017/taskmanager
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=taskmanager
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  redis_data:
+    driver: local
+  mongo_data:
+    driver: local
