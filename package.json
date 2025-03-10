@@ -37,5 +37,10 @@
     "winston-daily-rotate-file": "^5.0.0",
     "winston-elasticsearch": "^0.19.0",
     "winston-logstash-transport": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
   }
 }

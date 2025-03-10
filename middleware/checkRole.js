@@ -1,5 +1,5 @@
-const checkRole=(role) => (req,res,next) => {
-    if (req.user.role!==role) return res.status(403).json({message:`Access is for ${role}only`});
+const checkRole=(userId,task) => (req,res,next) => {
+    if (!task.coordinator.equals(userId)) return res.status(403).json({message:`Access is for coordinators only`});
     next();
 };
 module.exports=checkRole;

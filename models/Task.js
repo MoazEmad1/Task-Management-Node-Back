@@ -10,10 +10,12 @@ const taskSchema=new mongoose.Schema({
         type:Date,
         required:true
   },
+  
     startDate:{
         type:Date,
         default:Date.now
-  },
+  },//make state use enum
+  //#it is enum with string and it can't be changed
     state:{
         type:String,
         enum:['To do','In progress','Done','In review','Approved','Not sure'],
@@ -55,3 +57,5 @@ taskSchema.index({contributors:1});
 
 
 module.exports=mongoose.model('Task',taskSchema);
+// TODO :
+//user sees his activities

@@ -8,3 +8,16 @@
 {"level":"info","message":"Fetching tasks","search":"Test","timestamp":"2025-03-03T20:36:39.147Z"}
 {"level":"info","message":"GET /api/tasks?search=Test&limit=5 - ::1","timestamp":"2025-03-03T20:37:48.054Z"}
 {"level":"info","message":"Fetching tasks","search":"Test","timestamp":"2025-03-03T20:37:48.058Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T20:41:33.152Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:20:28.615Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:20:38.357Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:21:31.201Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:22:26.113Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:24:05.398Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:24:31.177Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:24:37.532Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:30:54.959Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:32:47.768Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:57:58.769Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-03T21:58:03.460Z"}
+{"level":"info","message":"Testing app.log","timestamp":"2025-03-10T01:25:25.313Z"}

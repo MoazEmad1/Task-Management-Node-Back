@@ -13,6 +13,7 @@ const cron=require('node-cron');
 const authRoutes=require('./routes/authRoutes');
 const taskRoutes=require('./routes/taskRoutes');
 const oldTaskRoutes=require('./routes/oldTaskRoutes')
+const userRoutes=require('./routes/userRoutes');
 const {moveOldTasks}=require('./jobs/moveTasksJob');
 const logger=require("./config/logger");
 
@@ -32,8 +33,8 @@ const MONGO_URI=process.env.MONGO_URI||'mongodb://localhost:27017/TaskManagement
 mongoose.connect(MONGO_URI)
 .then(()=>console.log('Connected to mongoDB'))
 .catch(err=>console.error('Connection Error to mongoDB',err));
-
-cron.schedule('* * * * *',()=>{
+//intense need to modify
+cron.schedule('0 * * * *',()=>{
   console.log('Running scheduled task check...');
   moveOldTasks();
 });
@@ -54,5 +55,6 @@ logger.info("Testing app.log");
 app.use('/api/auth',authRoutes);
 app.use('/api/tasks',taskRoutes);
 app.use('/api/oldTasks',oldTaskRoutes);
+app.use('/api/users',userRoutes);
 
 app.listen(PORT,()=> console.log(`Server running on port ${PORT}`));
