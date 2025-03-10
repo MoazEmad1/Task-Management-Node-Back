@@ -5,7 +5,6 @@ const redisClient=require('../config/redis');
 const logger=require("../config/logger");
 const Activity=require('../models/Activity');
 
-//modify to make each service in a file
 
 exports.createTask=async(req)=>{
     const {title,dueDate,contributors}=req.body;
@@ -194,6 +193,6 @@ exports.getTasks=async(req)=>{
 
     await redisClient.set(cacheKey, JSON.stringify(tasks), { EX:60 });
     logger.info("Tasks fetched", { state, search });
-    
+
     return { tasks, lastId:tasks.length ? tasks[tasks.length - 1]._id :null };
 }

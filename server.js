@@ -6,7 +6,10 @@ const compression=require('compression');
 const cors=require('cors');
 // const pino=require('pino');
 // const pinoHttp=require('pino-http');
-const cron=require('node-cron');
+// const cron=require('node-cron');
+const {initKafka}=require('./config/kafka');
+const {consumeMessages}=require('./jobs/moveTasksJob');
+const {triggerTaskMove}=require('./producer');
 
 
 
@@ -33,11 +36,13 @@ const MONGO_URI=process.env.MONGO_URI||'mongodb://localhost:27017/TaskManagement
 mongoose.connect(MONGO_URI)
 .then(()=>console.log('Connected to mongoDB'))
 .catch(err=>console.error('Connection Error to mongoDB',err));
-//intense need to modify
-cron.schedule('0 * * * *',()=>{
-  console.log('Running scheduled task check...');
-  moveOldTasks();
-});
+
+initKafka().then(() => {
+  console.log('Kafka initialized');
+  consumeMessages();
+}).catch(err => console.error('Kafka initialization error:', err));
+
+setInterval(triggerTaskMove, 60 * 60 * 1000)
 
 app.use((req,res,next)=>{
   logger.info(`${req.method} ${req.url} - ${req.ip}`);

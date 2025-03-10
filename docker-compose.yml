@@ -7,6 +7,7 @@ services:
       - redis
       - mongodb
       - logstash
+      - kafka
     ports:
       - "3000:3000"
     environment:
@@ -16,6 +17,7 @@ services:
       - MONGO_URI=mongodb://mongo:27017/TaskManagement
       - LOGSTASH_HOST=logstash
       - LOGSTASH_PORT=5044
+      - KAFKA_BROKER=kafka:9092
 
   redis:
     image: redis:latest
@@ -45,7 +47,6 @@ services:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=false 
-
     ports:
       - "9200:9200"
     volumes:
@@ -80,6 +81,30 @@ services:
       - ./logs:/var/log/app
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
     command: ["filebeat", "-e", "-strict.perms=false"]
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper_container
+    restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka_container
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
 volumes:
   redis_data:

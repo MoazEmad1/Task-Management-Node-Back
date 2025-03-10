@@ -8,7 +8,7 @@ const logger = winston.createLogger({
   format: logFormat,
   transports: [
     new winston.transports.File({filename:'./logs/app.log'}),
-    new winston.transports.Console(),
+    new winston.transports.Console()
   ],
 });
 if(process.env.NODE_ENV!=="production"){
